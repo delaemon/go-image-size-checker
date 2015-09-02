@@ -17,6 +17,7 @@ import (
 var (
 	currentDir, _ = os.Getwd()
 	mode          string
+	size          int64
 )
 
 type Image struct {
@@ -55,6 +56,13 @@ func main() {
 				fmt.Fprintln(os.Stderr, "file size zero. "+path)
 				continue
 			}
+			if size > 0 {
+				if fileinfo.Size() > size {
+					fmt.Fprintf(os.Stderr, "file size over the limit %d byte. path: %s \n",
+						size, path)
+					continue
+				}
+			}
 			img := Image{path, GetImageSize(path)}
 			fmt.Printf("%s, width: %d, height: %d\n",
 				img.path, img.config.Width, img.config.Height)
@@ -84,6 +92,7 @@ func main() {
 func setFlag() {
 	f := flag.NewFlagSet(os.Args[0], flag.ExitOnError)
 	f.StringVar(&mode, "mode", "pow2", "pow2 / mul4")
+	f.Int64Var(&size, "size", 0, "data size limit")
 	f.Parse(os.Args[1:])
 	for 0 < f.NArg() {
 		f.Parse(f.Args()[1:])
