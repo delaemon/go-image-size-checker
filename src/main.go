@@ -56,8 +56,8 @@ func main() {
 				continue
 			}
 			img := Image{path, GetImageSize(path)}
-			fmt.Printf("width: %d, height: %d\n",
-				img.config.Width, img.config.Height)
+			fmt.Printf("%s, width: %d, height: %d\n",
+				img.path, img.config.Width, img.config.Height)
 			imgList = append(imgList, img)
 		}
 	}
